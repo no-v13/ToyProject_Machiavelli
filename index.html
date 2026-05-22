@@ -1,0 +1,1189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Machiavelli AI Advisory Hub</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,500&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
+              serif: ["'Playfair Display'", "Georgia", "serif"],
+              display: ["'Space Grotesk'", "sans-serif"],
+              mono: ["'JetBrains Mono'", "monospace"],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Smooth transitions and custom styles */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #faf8f3;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #dfcca4;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #8a5a36;
+      }
+      .parchment-glow {
+        box-shadow: 0 4px 20px -2px rgba(92, 58, 33, 0.08);
+      }
+      .decree-border {
+        border-image: linear-gradient(to right, #dfcca4, #b49b71, #dfcca4) 1;
+      }
+      @keyframes pulse-opacity {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 0.4; }
+      }
+      .animate-pulse-slow {
+        animation: pulse-opacity 3s infinite ease-in-out;
+      }
+    </style>
+  </head>
+  <body class="relative min-h-screen w-full bg-[#faf8f3] text-[#2c1d11] font-sans flex flex-col selection:bg-[#eadecc] selection:text-[#3a2010]">
+    
+    <!-- Top Header Navigation Bar -->
+    <nav class="sticky top-0 z-40 w-full bg-[#fffdf9]/90 backdrop-blur border-b border-[#dfcca4] px-4 py-3 sm:px-6 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i data-lucide="scroll" class="w-5 h-5 text-[#8a5a36]"></i>
+        <span class="font-display font-semibold tracking-tight text-xs uppercase" id="nav-hub-subtitle">Florentine Advisory Hub</span>
+      </div>
+      
+      <!-- Language Selector -->
+      <div class="relative">
+        <button id="lang-btn" onclick="toggleLangDropdown()" class="px-3 py-1.5 bg-[#fffdf9] hover:bg-[#faf6ec] border border-[#dfcca4] hover:border-[#8a5a36] text-xs font-serif font-bold text-[#5c3a21] rounded shadow-sm transition-all flex items-center gap-1.5 cursor-pointer">
+          <span id="active-lang-text">🌐 한국어</span>
+          <span class="text-[9px] opacity-65">▼</span>
+        </button>
+        <div id="lang-menu" class="hidden absolute right-0 mt-1.5 w-36 bg-[#fffdf9] border border-[#dfcca4] rounded shadow-lg overflow-hidden flex flex-col z-[100] font-serif">
+          <button onclick="changeLanguage('ko')" class="lang-item px-3 py-2 text-xs text-left hover:bg-[#f5efe2] transition-colors border-b border-[#dfcca4]/40 flex items-center justify-between font-bold text-[#8a5a36]">
+            <span>한국어</span>
+            <span class="check-mark text-[10px] text-[#8a5a36]">✓</span>
+          </button>
+          <button onclick="changeLanguage('en')" class="lang-item px-3 py-2 text-xs text-left hover:bg-[#f5efe2] transition-colors border-b border-[#dfcca4]/40 flex items-center justify-between text-[#5a4b3d]">
+            <span>English</span>
+            <span class="check-mark hidden text-[10px] text-[#8a5a36]">✓</span>
+          </button>
+          <button onclick="changeLanguage('fr')" class="lang-item px-3 py-2 text-xs text-left hover:bg-[#f5efe2] transition-colors border-b border-[#dfcca4]/40 flex items-center justify-between text-[#5a4b3d]">
+            <span>Français</span>
+            <span class="check-mark hidden text-[10px] text-[#8a5a36]">✓</span>
+          </button>
+          <button onclick="changeLanguage('zh')" class="lang-item px-3 py-2 text-xs text-left hover:bg-[#f5efe2] transition-colors border-b border-[#dfcca4]/40 flex items-center justify-between text-[#5a4b3d]">
+            <span>繁體中文</span>
+            <span class="check-mark hidden text-[10px] text-[#8a5a36]">✓</span>
+          </button>
+          <button onclick="changeLanguage('es')" class="lang-item px-3 py-2 text-xs text-left hover:bg-[#f5efe2] transition-colors flex items-center justify-between text-[#5a4b3d]">
+            <span>Español</span>
+            <span class="check-mark hidden text-[10px] text-[#8a5a36]">✓</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content Layout -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-8">
+      
+      <!-- Side Archive List -->
+      <aside class="w-full lg:w-80 shrink-0 flex flex-col gap-4">
+        <div class="bg-[#fffdf9] border border-[#dfcca4] rounded p-5 shadow-sm parchment-glow">
+          <div class="flex items-center justify-between border-b border-[#dfcca4] pb-3 mb-4">
+            <h2 class="font-serif font-bold text-sm tracking-wide text-[#5c3a21] flex items-center gap-1.5" id="lbl-archive">
+              <i data-lucide="bookmark" class="w-4 h-4"></i> Expertises Enregistrées
+            </h2>
+            <button id="btn-delete-all" onclick="clearHistory()" class="text-[10px] font-semibold text-[#a04e30] border border-[#a04e30]/30 hover:bg-[#fcf1ee] px-2 py-1 rounded transition-colors cursor-pointer hidden">
+              Purger tout
+            </button>
+          </div>
+          
+          <div id="archive-list" class="max-h-64 lg:max-h-[28rem] overflow-y-auto space-y-2 pr-1">
+            <!-- Dynamically populated -->
+          </div>
+          
+          <div id="archive-empty" class="text-center py-8 text-xs text-[#a39482]">
+            <i data-lucide="file-text" class="w-7 h-7 mx-auto mb-2 opacity-40"></i>
+            <p class="font-serif font-medium" id="lbl-archive-empty">Your archive is empty.</p>
+            <p class="text-[10px] opacity-75 mt-1" id="lbl-archive-empty-sub">Submit a case to save recommendations.</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Central Advisory Area -->
+      <section class="flex-grow flex flex-col gap-8 min-w-0" id="advisory-stage">
+        
+        <!-- Welcome Jumbotron -->
+        <div id="welcome-intro" class="bg-[#fffdf9] border border-[#dfcca4] rounded p-6 shadow-sm flex flex-col md:flex-row gap-6 items-start parchment-glow">
+          <div class="w-20 h-20 shrink-0 rounded border-2 border-[#dfcca4] overflow-hidden bg-amber-50 relative flex items-center justify-center p-1 bg-gradient-to-br from-amber-50 to-orange-100/50">
+            <!-- Embossed Quill Graphic -->
+            <i data-lucide="scroll" class="w-10 h-10 text-[#8a5a36] opacity-80"></i>
+          </div>
+          <div class="flex-grow min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <h1 class="font-serif font-black text-xl tracking-tight text-[#3a2210]" id="lbl-mach-name">Niccolò Machiavelli ✒️</h1>
+              <span class="text-[10px] font-display uppercase tracking-wider bg-[#f8f1df] px-2 py-0.5 rounded border border-[#dfcca4]/60 text-[#8a5a36]" id="lbl-mach-role">Chancellor of Realism</span>
+            </div>
+            <p class="text-xs text-[#5a4b3d] leading-relaxed mb-4 font-serif" id="lbl-mach-desc">
+              This advisory chamber offers no space for empty compliments, moral illusions, or sweet consolation. We dissect conflicts through the cold, raw calculation of power and self-interest. Analyze your Virtù and construct defensive dykes to tame fickle Fortuna.
+            </p>
+            <div class="border-l-2 border-[#8a5a36]/40 pl-3 py-1 bg-[#faf8f3] rounded-r">
+              <p class="text-xs italic font-serif text-[#785b41]" id="lbl-mach-aphorism">
+                "Men ought either to be well treated or crushed, because they can avenge themselves of lighter injuries, but of more serious ones they cannot."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Presets Selection Area -->
+        <div id="preset-container" class="space-y-3">
+          <h3 class="font-display font-semibold text-xs uppercase text-[#8c7456] tracking-wider flex items-center gap-1.5" id="lbl-preset-header">
+            ⚔️ Three Strategic Dilemmas
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="preset-grid">
+            <!-- Populated via Javascript -->
+          </div>
+        </div>
+
+        <!-- Input State Portal Form -->
+        <div class="bg-[#fffdf9] border border-[#dfcca4] rounded p-5 shadow-sm parchment-glow space-y-4">
+          <div class="flex items-center justify-between">
+            <label for="user-question" class="font-serif font-bold text-sm text-[#5c3a21] flex items-center gap-1.5" id="lbl-form-title">
+              ✒️ State your dilemma or tactical conflict clearly
+            </label>
+            <span class="text-[11px] font-mono text-[#a39482]" id="char-counter">0 / 1000 chars</span>
+          </div>
+
+          <textarea id="user-question" maxlength="1000" rows="5" class="w-full bg-[#faf8f3] border border-[#dfcca4] rounded p-3 text-xs focus:outline-none focus:ring-1 focus:ring-[#8a5a36] focus:border-[#8a5a36] font-serif leading-relaxed text-[#2c1d11] placeholder:text-[#a39482]/70 resize-none transition-all duration-200" placeholder="e.g., 'I am contemplating resigning from my office...'"></textarea>
+          
+          <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+            <span class="text-[10px] text-[#a39482] font-serif italic" id="lbl-form-notice">
+              * Emotional empathy, false hopes, and moral expectations are systematically excluded. Answers are drafted with absolute realistic gravity.
+            </span>
+            <button id="btn-submit" onclick="submitDilemma()" class="px-5 py-2.5 bg-[#5c3a21] hover:bg-[#8a5a36] text-[#faf8f3] text-xs font-serif font-bold rounded shadow transition-all cursor-pointer flex items-center gap-2 select-none self-end">
+              <i data-lucide="scroll" class="w-4 h-4"></i>
+              <span id="lbl-submit">📜 Submit Petition for Appraisal</span>
+            </button>
+          </div>
+          <div id="error-block" class="hidden text-[11px] font-serif font-medium bg-[#fcf1ee] border border-[#e0bfb5] text-[#9c3a1d] p-3 rounded flex items-start gap-1.5">
+            <i data-lucide="help-circle" class="w-4 h-4 shrink-0 mt-0.5"></i>
+            <span id="error-text">Please enter a valid message.</span>
+          </div>
+        </div>
+
+        <!-- Official Advisory Decree View Panel (Initially Secret) -->
+        <article id="decree-result-panel" class="hidden space-y-6">
+          <div class="bg-[#fffdf9] border-2 border-[#dfcca4] rounded p-6 sm:p-8 shadow-md relative overflow-hidden bg-[radial-gradient(#fffdf9_65%,#fdfbf7_100%)]">
+            <!-- Ribbon watermark decoration -->
+            <div class="absolute -top-12 -right-12 w-28 h-28 border-4 border-[#dfcca4]/20 rounded-full flex items-center justify-center rotate-45 pointer-events-none select-none">
+              <div class="w-20 h-20 border border-[#dfcca4]/20 rounded-full"></div>
+            </div>
+            
+            <div class="flex items-center justify-between border-b border-[#dfcca4] pb-4 mb-6">
+              <div class="space-y-1">
+                <span class="text-[10px] font-display font-semibold uppercase tracking-widest text-[#a39482]" id="lbl-result-h">📜 Official Advisory Dispatch</span>
+                <h2 class="font-serif font-bold text-lg text-[#3a2210] flex items-center gap-1.5" id="lbl-decree-title">
+                  Rescript of Official Decision
+                </h2>
+              </div>
+              <button onclick="copyToClipboard()" class="hover:bg-[#faf6ec] text-[#8a5a36] border border-[#dfcca4] px-2.5 py-1.5 rounded text-[11px] font-serif font-semibold transition-all flex items-center gap-1.5 cursor-pointer select-none">
+                <i data-lucide="copy" class="w-3.5 h-3.5" id="copy-icon"></i>
+                <span id="lbl-copy">Copy Document Text</span>
+              </button>
+            </div>
+
+            <div class="space-y-6">
+              <!-- Prince Quote Scroll Block -->
+              <div class="bg-[#faf8f3] border border-[#dfcca4] rounded p-4 relative shadow-inner">
+                <span class="absolute -top-2.5 left-4 bg-[#fffdf9] px-2 text-[10px] font-display font-semibold uppercase text-[#8a5a36]" id="lbl-source-label">📖 Passage from 'The Prince'</span>
+                <div class="space-y-2 pt-1">
+                  <p class="font-display font-semibold text-xs text-[#5c3a21] uppercase tracking-wider" id="decree-chapter"></p>
+                  <p class="font-serif italic text-xs leading-relaxed text-[#785b41]" id="decree-quote"></p>
+                </div>
+              </div>
+
+              <!-- Strategic Appraisal -->
+              <div class="space-y-2">
+                <h4 class="font-serif font-bold text-xs uppercase tracking-wider text-[#8a5a36]" id="lbl-advice-label">📜 Machiavelli's Strategic Appraisal</h4>
+                <div class="font-serif text-xs leading-relaxed text-[#2c1d11] space-y-3 bg-[#faf8f3]/30 p-4 rounded border border-[#dfcca4]/30" id="decree-full-answer">
+                  <!-- Injected answers -->
+                </div>
+              </div>
+
+              <!-- Action Directives (2 cards) -->
+              <div class="space-y-3">
+                <h4 class="font-display font-semibold text-xs uppercase tracking-wider text-[#8c7456]" id="lbl-action-label">⚔️ Core Directives for Action</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="decree-advices">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+              <!-- Sharp Concluding aphorism -->
+              <div class="pt-4 border-t border-[#dfcca4]/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="font-serif italic text-xs text-[#a04e30] border-l-2 border-[#a04e30]/40 pl-3 py-1" id="decree-conclude"></p>
+                <button onclick="resetAsNew()" class="px-4 py-2 hover:bg-[#faf6ec] text-[#5c3a21] border border-[#dfcca4] hover:border-[#8a5a36] text-xs font-serif font-bold rounded shadow-sm transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
+                  <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                  <span id="lbl-another">Submit Another Petition</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <p class="text-center text-[10px] text-[#a39482] font-serif" id="lbl-result-notice">
+            📖 This counsel is strictly crafted to reveal realpolitik undercurrents. It exposes the bare mechanics of power.
+          </p>
+        </article>
+
+      </section>
+    </main>
+
+    <!-- Bottom Footer Section -->
+    <footer class="w-full bg-[#fffdf9] border-t border-[#dfcca4] px-4 py-6 sm:px-6 mt-12">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-[10px] text-[#a39482] font-serif" id="lbl-footer-copy">© 2026 Machiavelli Realist Advisory. All Sovereign Rights Reserved.</p>
+        <div class="flex items-center gap-4 text-[10px] font-display font-semibold tracking-wider uppercase text-[#cbb18a]">
+          <span id="lbl-skill-1">Cultivate Virtù</span>
+          <span class="text-xs select-none">•</span>
+          <span id="lbl-skill-2">Reject Vanity</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Animated Loading screen modal/dialog -->
+    <dialog id="loading-overlay" class="modal bg-black/40 backdrop-blur-sm fixed inset-0 z-50 w-full h-full border-none m-0 items-center justify-center flex hidden outline-none">
+      <div class="bg-[#fffdf9] border-2 border-[#dfcca4] max-w-sm w-full mx-4 rounded p-6 shadow-2xl relative text-center parchment-glow outline-none">
+        <!-- Spinner SVG -->
+        <div class="w-16 h-16 mx-auto mb-5 relative flex items-center justify-center">
+          <svg class="animate-spin h-10 w-10 text-[#8a5a36]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <i data-lucide="scroll" class="w-4 h-4 text-[#8a5a36] absolute animate-pulse-slow"></i>
+        </div>
+        
+        <p class="font-serif italic text-xs font-semibold text-[#5c3a21] leading-relaxed select-none mb-4 min-h-12 flex items-center justify-center px-2" id="loading-message-text">
+          마키아벨리가 깃펜 끝에 묵직한 잉크를 적시고 있습니다...
+        </p>
+        
+        <div class="border-t border-[#dfcca4]/50 pt-3 opacity-80">
+          <p class="text-[10px] italic font-serif text-[#a39482] leading-normal" id="lbl-loading-quote">
+            "Fortune is like a raging river, which when angry, floods the plains. One must build dykes and embankments beforehand."
+          </p>
+          <span class="text-[9px] font-display uppercase font-bold tracking-wider text-[#cbb18a] mt-1.5 block" id="lbl-loading-author">- Retrieving political drafts -</span>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Client-Side Vanilla Application Logic Script -->
+    <script>
+      // 5-Language Translations Map
+      const TRANSLATIONS = {
+        ko: {
+          appTitle: "군주론 AI 고민 상담소",
+          appSubtitle: "“행동을 멈추고 방관하는 순간 파멸이 시작됩니다.”",
+          roleLabel: "Niccolò Machiavelli",
+          roleDesc: "현실주의 사색 자문각",
+          hubTitle: "⚔️ Florentine Advisory Hub",
+          hubSubtitle: "소치 자문각",
+          machName: "니콜로 마키아벨리 ✒️",
+          machDesc: "이곳은 허황된 위로나 도덕적 환상 없이 오직 냉엄하게 역학을 해체하는 현실주의 공간입니다. 당신의 세력, 내적 역량(Virtù)을 냉철히 평가하여 스스로 둑과 제방을 쌓도록 유일한 수책을 지시할 것입니다.",
+          machAphorism: "“인간들이란 작은 손해에는 보복하려 하지만 깊은 타격 앞에서는 감히 복수를 도모하지 못합니다.”",
+          presetHeader: "⚔️ 군주들이 자주 상소하는 3대 비망 고뇌",
+          presetSubmitText: "서간 상소 제안 ✒️",
+          formTitle: "✒️ 귀하의 고민 혹은 전황을 명확히 기재하십시오",
+          formCharCount: "자",
+          formPlaceholder: "예: '퇴사를 진지하게 고민하고 있습니다. 회사를 보았을 땐 비전이 없으나 당장 나가 안전하지 않을까 걱정스럽습니다. 현실적으로 자립할 상비군 역량을 다지는 조언을 여쭙습니다.'",
+          formNotice: "* 감정적인 위로, 헛된 희망, 온정은 원칙적으로 배제되어 지극히 서생적이고 차갑게 집필됩니다.",
+          errorShort: "최소 10자 이상 고민의 형세를 자세히 기재해 주셔야 냉철한 역량 분석이 가능합니다.",
+          errorEmpty: "고민을 상세히 적거나 아래의 자문 상소를 선택해 주십시오.",
+          submitBtnLoading: "마키아벨리와 현안 분석 조율 중...",
+          submitBtnNormal: "📜 고민 상찰 및 분석 시작",
+          loadingQuote: "“운명은 격렬한 강물과 같아서 사전에 둑을 쌓아두지 않으면 침수당하는 법입니다.”",
+          loadingAuthor: "- 마키아벨리 비법서 기록조정 중 -",
+          resultHeader: "📜 소치 자문 서함 정본",
+          btnCopyNormal: "정본 텍스트 복사",
+          btnCopyCopied: "복사 완료",
+          resultSourceLabel: "📖 군주론 연동 구절",
+          resultAdviceLabel: "📜 마키아벨리의 답변",
+          resultActionLabel: "⚔️ 즉각 단행하여 실력을 보존할 지침",
+          resultNotice: "📖 이 서신의 자문은 오로지 사리를 구명하기 위함입니다. 다른 상소를 진학하려면 아래를 누르십시오.",
+          btnAnotherCounsel: "다른 고민 진학상소",
+          sidebarHeader: "서서에 축적된 자문고",
+          btnDeleteAll: "전체 소각",
+          sidebarEmpty: "보관된 통치 결단 사책이 없습니다.",
+          sidebarEmptySub: "고민을 상소하여 보존하십시오.",
+          clearConfirmText: "⚔️ 모든 자문 기록을 소각하시겠습니까? (복구 불가)",
+          btnConfirmClear: "소각 승인 ✒️",
+          btnCancelClear: "철회",
+          aphorismHeaderUrl: "📖 Aphorisms",
+          aphorismHeaderTitle: "군주의 수명을 연장하는 경구",
+          aphorismBody: "“인간들이란 다정한 대우를 받거나 아니면 단호하게 짓밟혀야 합니다. 가벼운 피해에 대해서는 보복하려 들지만, 타격이 깊고 치명적이면 결코 보복할 엄두를 내지 못하기 때문입니다. 그러므로 인간에게 상처를 주려거든 보복의 두려움이 없는 치명적인 타격을 주어야 마땅합니다.”",
+          aphorismSource: "- 《군주론》 제3장 복합 군주국 -",
+          footerCopy: "© 2026 Machiavelli Realist Counsel Center. All Sovereign Rights Reserved.",
+          footerSkill1: "기량(Virtù) 연성",
+          footerSkill2: "속념 환상 배격",
+          sourceText: "출처: ",
+          adviceAriaLabel: "자문 상찰"
+        },
+        en: {
+          appTitle: "Machiavelli AI Advisory",
+          appSubtitle: "“The promptness of decision diminishes the danger.”",
+          roleLabel: "Niccolò Machiavelli",
+          roleDesc: "Realist Advisory Chancellor",
+          hubTitle: "⚔️ Florentine Advisory Hub",
+          hubSubtitle: "Chancellery Cabinet",
+          machName: "Niccolò Machiavelli ✒️",
+          machDesc: "This room offers no place for empty pleasantries, moral illusions, or sweet comfort. We dissect conflicts through the cold, raw calculation of forces. Analyze your Virtù and construct defensive dykes to tame fickle Fortuna.",
+          machAphorism: "“Men ought either to be well treated or crushed, because they can avenge themselves of lighter injuries, but of more serious ones they cannot.”",
+          presetHeader: "⚔️ Three Vital Modern Strategic Dilemmas",
+          presetSubmitText: "Submit Template ✒️",
+          formTitle: "✒️ State your dilemma or tactical conflict clearly",
+          formCharCount: "chars",
+          formPlaceholder: "e.g., 'I am contemplating resigning from my office. The corporate fortress lacks future vision, but I fear the loss of its walls. How do I forge my own sovereign army to secure my independence?'",
+          formNotice: "* Emotional empathy, false hopes, and moral expectations are systematically excluded. Answers are drafted with absolute realistic gravity.",
+          errorShort: "Please describe your situation with at least 10 characters to allow a clinical analysis of your Virtù.",
+          errorEmpty: "Please enter your dilemma or choose an advisory template below.",
+          submitBtnLoading: "Deliberating with Machiavelli...",
+          submitBtnNormal: "📜 Submit Petition for Appraisal",
+          loadingQuote: "“Fortune is like a raging river, which when angry, floods the plains. One must build dykes and embankments beforehand.”",
+          loadingAuthor: "- Retrieving political drafts -",
+          resultHeader: "📜 Official Advisory Dispatch (Rescript)",
+          btnCopyNormal: "Copy Document Text",
+          btnCopyCopied: "Copied!",
+          resultSourceLabel: "📖 Passage from 'The Prince'",
+          resultAdviceLabel: "📜 Machiavelli's Strategic Appraisal",
+          resultActionLabel: "⚔️ Core Directives for Action",
+          resultNotice: "📖 This counsel is strictly crafted to reveal realpolitik undercurrents. To submit another state petition, press below.",
+          btnAnotherCounsel: "Submit Another Petition",
+          sidebarHeader: "Saved Appraisals",
+          btnDeleteAll: "Purge All",
+          sidebarEmpty: "Your archive of sovereign dispatches is empty.",
+          sidebarEmptySub: "Submit a petition to preserve strategic records.",
+          clearConfirmText: "⚔️ Do you wish to purge all recorded dispatches? (This action is irreversible)",
+          btnConfirmClear: "Approve Purge ✒️",
+          btnCancelClear: "Withdraw",
+          aphorismHeaderUrl: "📖 Aphorisms",
+          aphorismHeaderTitle: "Precepts to Sustain Sovereign Rule",
+          aphorismBody: "“Men should be either treated with kindness or utterly crushed. They avenge light grievances but are helpless against devastating ruin. Therefore, the injury we do to a man must be such that we do not fear his vengeance.”",
+          aphorismSource: "- 《The Prince》, Chapter III: Mixed Principalities -",
+          footerCopy: "© 2026 Machiavelli Realist Counsel Center. All Sovereign Rights Reserved.",
+          footerSkill1: "Cultivate Virtù",
+          footerSkill2: "Reject Vanity",
+          sourceText: "Source: ",
+          adviceAriaLabel: "Appraisal"
+        },
+        fr: {
+          appTitle: "Machiavelli AI Advisory",
+          appSubtitle: "« La promptitude de la décision diminue le danger. »",
+          roleLabel: "Nicolas Machiavel",
+          roleDesc: "Chancelier du Réalisme Politique",
+          hubTitle: "⚔️ Florentine Advisory Hub",
+          hubSubtitle: "Cabinet de la Chancellerie",
+          machName: "Nicolas Machiavel ✒️",
+          machDesc: "Ce cabinet n'offre aucune place aux compliments vides, aux illusions morales ou à la douce consolation. Nous disséquons les conflits à travers le calcul froid et brut des forces. Analysez votre Virtù et construisez des digues pour dompter la fluctuante Fortuna.",
+          machAphorism: "« Les hommes doivent être ou caressés ou écrasés ; car ils se vengent des injures légères, mais ils ne le peuvent des graves. »",
+          presetHeader: "⚔️ Trois Dilemmes Stratégiques Fondamentaux",
+          presetSubmitText: "Soumettre le modèle ✒️",
+          formTitle: "✒️ Énoncez clairement votre dilemme ou conflit tactique",
+          formCharCount: "caractères",
+          formPlaceholder: "ex : 'J'envisage de donner ma démission de mes fonctions. La forteresse corporative n'a pas d'avenir...'",
+          formNotice: "* L'empathie émotionnelle, les faux espoirs et les attentes morales sont systématiquement écartés. Les réponses sont rédigées avec gravité.",
+          errorShort: "Veuillez décrire votre situation avec au moins 10 caractères pour permettre une analyse clinique de votre Virtù.",
+          errorEmpty: "Veuillez entrer votre dilemme ou choisir un modèle ci-dessous.",
+          submitBtnLoading: "Délibération avec Machiavel...",
+          submitBtnNormal: "📜 Envoyer une requête pour expertise",
+          loadingQuote: "« La fortune est comme un fleuve impétueux qui, lorsqu'il se met en colère, inonde les plaines. Il faut y construire des digues. »",
+          loadingAuthor: "- Récupération des rapports politiques -",
+          resultHeader: "📜 Rescrit de Conseil Officiel",
+          btnCopyNormal: "Copier le document entier",
+          btnCopyCopied: "Copié !",
+          resultSourceLabel: "📖 Passage extrait du 'Prince'",
+          resultAdviceLabel: "📜 Expertise stratégique de Machiavel",
+          resultActionLabel: "⚔️ Directives d'actions immédiates",
+          resultNotice: "📖 Ce conseil est strictement modélisé pour révéler les courants de la Realpolitik. Pour soumettre une autre requête, appuyez ci-dessous.",
+          btnAnotherCounsel: "Soumettre un autre dossier",
+          sidebarHeader: "Expertises Enregistrées",
+          btnDeleteAll: "Purger tout",
+          sidebarEmpty: "Votre archive de dépêches souveraines est vide.",
+          sidebarEmptySub: "Soumettez un dossier pour préserver vos relevés stratégiques.",
+          clearConfirmText: "⚔️ Voulez-vous purger l'intégralité des rapports de conseil historisés ? (Cette action est irréversible)",
+          btnConfirmClear: "Approuver la purge ✒️",
+          btnCancelClear: "Annuler",
+          aphorismHeaderUrl: "📖 Aphorismes",
+          aphorismHeaderTitle: "Préceptes pour pérenniser l'autorité souveraine",
+          aphorismBody: "« Les hommes doivent être caressés ou écrasés ; car s'ils se vengent des offenses légères, ils ne le peuvent des grandes. Ainsi, l'offense que l'on fait à un homme doit être telle que l'on ne redoute pas sa vengeance. »",
+          aphorismSource: "- 《Le Prince》, Chapitre III : Des principautés mixtes -",
+          footerCopy: "© 2026 Centre de Conseil Réaliste Machiavel. Tous droits souverains réservés.",
+          footerSkill1: "Cultiver la Virtù",
+          footerSkill2: "Rejeter la Vanité",
+          sourceText: "Source : ",
+          adviceAriaLabel: "Expertise"
+        },
+        zh: {
+          appTitle: "馬基維利 AI 決策諮詢所",
+          appSubtitle: "「決策的迅速能減輕面臨的危險。」",
+          roleLabel: "尼可洛·馬基維利",
+          roleDesc: "現實主義外交決策顧問",
+          hubTitle: "⚔️ Florentine Advisory Hub",
+          hubSubtitle: "內閣決策廳",
+          machName: "尼可洛·馬基維利 ✒️",
+          machDesc: "本決策室拒絕虛偽的溫情、道德幻想與蜜語安慰。我們僅通過對力量與權力結構的冷酷、原始計算來剖析局勢。請精進您主動的才幹（Virtù），並興建堅固的防堤以抵禦機運（Fortuna）的怒濤藍水。",
+          machAphorism: "「人們應當要麼受到寬待，要麼被徹底消滅。因為他們能對輕微的傷害進行報復，卻對嚴重的傷害無能為力。」",
+          presetHeader: "⚔️ 現代君王常遇的三大核心戰略困境",
+          presetSubmitText: "送出此方案 ✒️",
+          formTitle: "✒️ 請清晰闡述您的切身困境或權力衝突",
+          formCharCount: "字",
+          formPlaceholder: "例如：『我正在考慮是否提交辭呈。目前的企業堡壘缺乏未來的前景...』",
+          formNotice: "* 本諮詢將系統性屏除情感同理、虛幻希望與道德期待。答覆皆以極致冷和現實主義提煉而成。",
+          errorShort: "請輸入至少 10 個字，以便我們對您的實力才幹（Virtù）進行客觀的臨床剖析。",
+          errorEmpty: "請填寫您的困境，或在下方選擇一項諮詢方案。",
+          submitBtnLoading: "正在與馬基維利商榷對策...",
+          submitBtnNormal: "📜 呈遞請願書以供戰略剖析",
+          loadingQuote: "「命運就像一條狂暴的河流，發怒時會淹沒平原。我們必須提早修築堤壩與防護牆。」",
+          loadingAuthor: "- 正在檢索歷史外交手稿 -",
+          resultHeader: "📜 官方諮詢決策詔書",
+          btnCopyNormal: "複製詔書全文",
+          btnCopyCopied: "已複製",
+          resultSourceLabel: "📖 《君王論》關聯典籍",
+          resultAdviceLabel: "📜 馬基維利的冷峻自決策略",
+          resultActionLabel: "⚔️ 即刻落實的戰術行動指南",
+          resultNotice: "📖 本自決方案旨在揭示地緣與權利博弈的底流。若要繼續呈遞其他請願，請點擊下方。",
+          btnAnotherCounsel: "呈遞另一份請願",
+          sidebarHeader: "已保存的詔書",
+          btnDeleteAll: "全部銷毀",
+          sidebarEmpty: "您的詔書檔案庫中目前沒有任何記錄。",
+          sidebarEmptySub: "請呈遞一份請願以保存您的決策筆記。",
+          clearConfirmText: "⚔️ 您確定要銷毀所有保存下來的決策詔書嗎？（此操作不可逆）",
+          btnConfirmClear: "確認銷毀 ✒️",
+          btnCancelClear: "撤銷",
+          aphorismHeaderUrl: "📖 警世格言",
+          aphorismHeaderTitle: "維護君主長久統治的至理",
+          aphorismBody: "「對人們應當要麼加以撫慰，要麼予以消滅。因為他們會對輕微的傷害進行報復，而對於致命的重創卻無能為力。因此，我們對他人造成的傷害，應當達到無需害怕其報復的程度。」",
+          aphorismSource: "- 《君王論》第三章：論混合型君王國 -",
+          footerCopy: "© 2026 馬基維利現實主義諮詢中心。保留所有主權權利。",
+          footerSkill1: "淬鍊主動實力 (Virtù)",
+          footerSkill2: "摒除虛榮幻想",
+          sourceText: "典籍來源：",
+          adviceAriaLabel: "諮詢剖析"
+        },
+        es: {
+          appTitle: "Machiavelli AI Advisory",
+          appSubtitle: "“La rapidez de la decisión disminuye el peligro.”",
+          roleLabel: "Niccolò Machiavelli",
+          roleDesc: "Canciller del Realismo Político",
+          hubTitle: "⚔️ Florentine Advisory Hub",
+          hubSubtitle: "Gabinete de la Cancillería",
+          machName: "Nicolás Maquiavelo ✒️",
+          machDesc: "Esta sala no admite cortesanías vacías, quimeras morales ni dulce consuelo. Diseccionamos las disputas mediante el descarnado cálculo de fuerzas. Autoexamine su Virtù y construya diques para cabalgar sobre la veleidosa Fortuna.",
+          machAphorism: "“A los hombres hay que conquistarlos o eliminarlos, porque se vengan de las ofensas leves, de las graves no pueden.”",
+          presetHeader: "⚔️ Tres Dilemas Tácticos Esenciales de la Modernidad",
+          presetSubmitText: "Presentar petición ✒️",
+          formTitle: "✒️ Describa con precisión su conflicto o dilema de poder",
+          formCharCount: "letras",
+          formPlaceholder: "ej. 'Estoy considerando presentar mi renuncia. El fuerte corporativo carece de futuro...'",
+          formNotice: "* El optimismo vano, el consuelo y la consideración moral quedan excluidos. Los dictámenes son formulados con implacable rigor de Estado.",
+          errorShort: "Se precisan al menos 10 caracteres para efectuar un escrutinio clínico de su Virtù.",
+          errorEmpty: "Introduzca su dilema o elija un caso predefinido abajo.",
+          submitBtnLoading: "Deliberando con Maquiavelo...",
+          submitBtnNormal: "📜 Presentar petición para dictamen",
+          loadingQuote: "“La fortuna es como un río turbulento que inunda las llanuras cuando se enfurece. Hay que levantar diques con antelación.”",
+          loadingAuthor: "- Extrayendo despachos políticos históricos -",
+          resultHeader: "📜 Rescripto del Dictamen Oficial",
+          btnCopyNormal: "Copiar documento completo",
+          btnCopyCopied: "Copiado",
+          resultSourceLabel: "📖 Fragmento de 'El Príncipe'",
+          resultAdviceLabel: "📜 Dictamen estratégico de Maquiavelo",
+          resultActionLabel: "⚔️ Directrices imperativas para la acción",
+          resultNotice: "📖 Este dictamen está formulado exclusivamente para revelar las dinámicas de poder. Para elevar otra consulta, pulse abajo.",
+          btnAnotherCounsel: "Elevar nueva consulta",
+          sidebarHeader: "Dictámenes Guardados",
+          btnDeleteAll: "Purgar todo",
+          sidebarEmpty: "No hay registros en su archivo de respuestas oficiales.",
+          sidebarEmptySub: "Presente una consulta para conservar sus registros de poder.",
+          clearConfirmText: "⚔️ ¿Desea purgar todo el archivo de respuestas guardadas? (Esta acción es irreversible)",
+          btnConfirmClear: "Aprobar purga ✒️",
+          btnCancelClear: "Desistir",
+          aphorismHeaderUrl: "📖 Aforismos",
+          aphorismHeaderTitle: "Preceptos para salvaguardar el señorío",
+          aphorismBody: "“A los hombres se les ha de mimar o aplastar, pues se vengan de las ofensas ligeras, pero de las graves no pueden; por tanto, la ofensa que se hace a un hombre debe ser tal que no se tema su venganza.”",
+          aphorismSource: "- 《El Príncipe》, Capítulo III: De los principados mixtos -",
+          footerCopy: "© 2026 Centro de Dictamen Realista Maquiavelo. Todos los derechos soberanos reservados.",
+          footerSkill1: "Forjar la Virtù",
+          footerSkill2: "Rechazar la Vanidad",
+          sourceText: "Fuente: ",
+          adviceAriaLabel: "Dictamen"
+        }
+      };
+
+      // Preset cards database
+      const PRESETS = {
+        ko: [
+          {
+            id: "unclear-future",
+            icon: "compass",
+            title: "막막한 앞날과 두려움",
+            shortDesc: "유약하게 운명(Fortuna)에 의탁하기보다, 자신만의 주동적 역량(Virtù)을 확보하는 방책",
+            exampleQuestion: "인생의 앞날이 두렵고 막막하여 길을 잃은 기분입니다. 요행을 바라는 마음이나 타인의 온정에 빌붙어 안정을 찾으려만 하게 되는데, 어떻게 해야 현실주의적 현안을 찾아 제 삶을 굳건히 통치해 나갈 수 있겠습니까?"
+          },
+          {
+            id: "resignation",
+            icon: "shield",
+            title: "퇴사 결단과 망설임",
+            shortDesc: "타인의 군격(회사의 울타리)을 떠나, 자신이라는 단단한 '상비군'의 무력을 점검하는 법",
+            exampleQuestion: "현재 직장을 떠나 새로운 독자 영역을 개척하려 하나 결단이 망설여집니다. 소속된 회사의 위상이 아닌, 오롯이 저 자신의 기술과 무기라는 '상비군'이 준비되어 있는지 냉정하게 점검하는 조언을 구합니다."
+          },
+          {
+            id: "relationship",
+            icon: "heart",
+            title: "관계와 상대의 기만",
+            shortDesc: "애걸하는 수하가 되기보다 만만하게 보이지 않는 단호한 지배력과 영역의 방벽 다지기",
+            exampleQuestion: "가까운 지인이나 사랑하는 이가 저를 소홀히 대하고 기만하는데도 외면당할까 두려워 끊지 못하고 끌려다눕니다. 상대가 결코 만만히 보지 못하도록 주도권을 회복할 단호함을 전수해 주십시오."
+          }
+        ],
+        en: [
+          {
+            id: "unclear-future",
+            icon: "compass",
+            title: "Fear of Uncertainty",
+            shortDesc: "How to seize active control through Virtù, instead of surrendering weakly to the waves of Fortuna.",
+            exampleQuestion: "I find myself gripped by a deep fear of the future, wandering aimlessly. I realize I am relying on passive wishful thinking and the kindness of others for security. How can I uncover raw realist measures to govern my life with unyielding command?"
+          },
+          {
+            id: "resignation",
+            icon: "shield",
+            title: "Resignation & Doubt",
+            shortDesc: "Leaving the mercenary walls of the corporate state to inspect the resolve of your own loyal standing force.",
+            exampleQuestion: "I am contemplating leaving my current office to seek independent dominion, yet I hesitate. I ask for your cold tactical audit: how do I rigorously inspect whether I possess the weapons and skill of my own 'standing force,' free from the shelter of my company's banner?"
+          },
+          {
+            id: "relationship",
+            icon: "heart",
+            title: "Betrayal & Alliances",
+            shortDesc: "Forgoing the submissive entreaties of a dependent client, and reinforcing absolute personal superiority.",
+            exampleQuestion: "A close ally and companion treats me with neglect and deceit, yet I am bound by the fear of exclusion and cannot sever the tie. Pray instruct me in the stern resolve required to reclaim my sovereign command, so they shall never dare trifle with my authority."
+          }
+        ],
+        fr: [
+          {
+            id: "unclear-future",
+            icon: "compass",
+            title: "Peur de l'Incertitude",
+            shortDesc: "Comment saisir le contrôle de son destin par la Virtù au lieu de capituler face à la changeante Fortuna.",
+            exampleQuestion: "Je me trouve paralysé par une profonde peur de l'avenir, errant sans but fixe. Je réalise que je compte sur le hasard et la bienveillance d'autrui pour ma sécurité. Comment découvrir des voies réalistes pour gouverner ma vie avec une autorité inflexible ?"
+          },
+          {
+            id: "resignation",
+            icon: "shield",
+            title: "Doutes de Démission",
+            shortDesc: "Quitter les remparts mercenaires de l'entreprise pour inspecter la résolution de votre propre armée souveraine.",
+            exampleQuestion: "J'envisage de quitter mon emploi actuel pour bâtir mon propre domaine d'activité, mais j'hésite. Je sollicite votre évaluation clinique : comment vérifier de manière rigoureuse si je dispose des armes et de la discipline d'une armée propre, hors du confort de cette entreprise ?"
+          },
+          {
+            id: "relationship",
+            icon: "heart",
+            title: "Alliance & Duperie",
+            shortDesc: "Abandonner les supplications d'une alliance dépendante et fortifier votre supériorité stratégique.",
+            exampleQuestion: "Un proche collaborateur me traite avec mépris et déloyauté, mais la peur de l'isolement m'empêche de trancher ce lien. Enseignez-moi la fermeté implacable requise pour restaurer mon autorité absolue afin qu'aucun allié ne se risque plus à se jouer de ma bienveillance."
+          }
+        ],
+        zh: [
+          {
+            id: "unclear-future",
+            icon: "compass",
+            title: "前途迷茫之恐懼",
+            shortDesc: "如何精進並掌握自己主動的力量（Virtù），而非一味懦弱地委身於命運（Fortuna）的波濤中。",
+            exampleQuestion: "面對人生的前程，我深感恐懼與茫然，彷彿失落了航向。我發現自己竟在指望僥倖與他人的施捨施惠來尋求安全感。我該如何採取最乾脆且理智的現實之道，重掌主動，堅定不移地支配我的人生局勢？"
+          },
+          {
+            id: "resignation",
+            icon: "shield",
+            title: "退職自立之遲疑",
+            shortDesc: "告別寄身傭兵式的公司城牆，冷靜點閱自身實力——清點是否已配備了「常備軍」戰斧。",
+            exampleQuestion: "我正計劃脫離現有公司的庇護去開闢一條獨立自持的道路，但內心卻充滿動搖。希望聽取您冷徹的局勢剖析：我該如何清醒檢視自己是否具備屬於我個人的核心技藝與能耐，這支獨立常備武裝足以讓我完全擺脫對外界藩籬的依賴嗎？"
+          },
+          {
+            id: "relationship",
+            icon: "heart",
+            title: "人事盟友之欺瞞",
+            shortDesc: "拒絕扮演屈尊乞憐的柔弱扈從，果斷築起尊嚴界牆，重塑讓對方不寒而慄的不可侵犯性。",
+            exampleQuestion: "某位親密盟友在背地裡欺騙我且對我多有輕慢，我卻因恐懼被孤立、拒絕而遲遲無法切斷這段關係，隨波逐流。請傳授我重塑最高主權不可侵犯性所需的鐵石心腸，使對方從此再不戰慄地收斂，絕不敢再肆意妄為。"
+          }
+        ],
+        es: [
+          {
+            id: "unclear-future",
+            icon: "compass",
+            title: "Temores de Incertidumbre",
+            shortDesc: "Cómo encauzar el timón mediante tu propia Virtù, en lugar de rendirse débilmente ante los embates de la Fortuna.",
+            exampleQuestion: "¿Cómo puedo sobreponerme a este temor constante al porvenir? Siento que dependo de la providencia o el confort ajeno para mantenerse estable. Le ruego me brinde una táctica sobria que me permita recobrar mi soberanía y gobernar mi vida con resolución."
+          },
+          {
+            id: "resignation",
+            icon: "shield",
+            title: "Dudas de Resignación",
+            shortDesc: "Abandonar el resguardo mercenario de su corporación para auditar la firmeza armada de sus propios recursos.",
+            exampleQuestion: "Estoy meditando apartarme de mi cargo corporativo para fundar un camino soberano, pero dudo en dar el paso. Le ruego efectúe un examen descarnado: ¿cómo audito críticamente si cuento con el calibre, armas e inclinación de mis milicias propias para prescindir del estandarte corporativo?"
+          },
+          {
+            id: "relationship",
+            icon: "heart",
+            title: "Alianzas y Engaños",
+            shortDesc: "Rechazar los ruegos de un vasallo condescendiente y consolidar su eminente autoridad estamental.",
+            exampleQuestion: "Un aliado cercano me devalúa e ignora de continuado, pero el pánico al desamparo me disuade de expulsarlo de mis lindes. Requiero que me instruya en la firmeza implacable requerida para restaurar mi dominio, a fin de que nadie se atreva jamás a jugar con mi respeto."
+          }
+        ]
+      };
+
+      // Loading messages lists
+      const LOADINGS = {
+        ko: [
+          "마키아벨리가 깃펜 끝에 묵직한 잉크를 적시고 있습니다...",
+          "피렌체 공화국 시절의 자문 비망록을 날카롭게 복기하는 중...",
+          "역사 속 군주들이 자초한 파멸적 타협의 원죄를 진단하는 중...",
+          "당신의 영토를 뒤덮은 나약함의 요새를 철저히 해체하는 중...",
+          "운명(Fortuna)의 난폭한 강줄기를 길들일 역량(Virtù)의 제방을 설계하는 중...",
+          "군주론의 깊은 서가에서 당신을 일깨울 구절을 채택하는 중...",
+          "동정과 위로라는 유약한 환각을 걷어내고 차가운 실리를 계산하는 중..."
+        ],
+        en: [
+          "Niccolò is dipping his quill into heavy iron gall ink...",
+          "Recalling diplomatic dispatches from the Florentine Republic...",
+          "Auditing the ruinous compromises that doomed past sovereigns...",
+          "Systematically dismantling the fortresses of illusion on your domain...",
+          "Designing robust embankments (Virtù) to tame the torrential river (Fortuna)...",
+          "Selecting the warning precepts from the deep shelves of political treatise...",
+          "Purging the weak hallucinations of comfort to calculate cold self-interest..."
+        ],
+        fr: [
+          "Nicolas trempe sa plume dans une encre de fer lourde...",
+          "Rappelant les dépêches diplomatiques de la République florentine...",
+          "Analysant les compromis ruineux qui ont condamné d'anciens souverains...",
+          "Démantelant systématiquement les forteresses d'illusions sur votre domaine...",
+          "Concevant des digues solides (Virtù) pour dompter le fleuve impétueux (Fortuna)...",
+          "Sélectionnant les préceptes avertis du fond des archives politiques...",
+          "Purgeant les vaines chimères du réconfort pour calculer le froid intérêt..."
+        ],
+        zh: [
+          "馬基維利正將他的羽毛筆浸入厚重的鐵膽墨水中...",
+          "竭力追想佛羅倫斯共和國時期的絕密外交文件...",
+          "深入剖析歷史歷代君主向平庸妥協所招致的毀滅性宿命...",
+          "正在無情摧毀您精神領地內那些由軟弱與幻想構築的沙堡...",
+          "精心規畫修築實力（Virtù）之大堤，以抵禦機運（Fortuna）的宿命山洪...",
+          "正從塵封多年的閣樓書架中，清點挑選出最能振聾發聵的權謀箴言...",
+          "掃除世俗一切毫無意義的廉價同情，冷酷地為您盤算克敵實益..."
+        ],
+        es: [
+          "Niccolò está mojando su pluma en tinta ferrogálica densa...",
+          "Evocando los despachos diplomáticos de la Florencia republicana...",
+          "Examinando los compromisarios ruines que precipitaron la caída de reyes...",
+          "Desmantelando metódicamente las ofertas de consuelo en su espíritu...",
+          "Proyectando recios malecones (Virtù) ante los cauces embravecidos (Fortuna)...",
+          "Extrayendo las máximas políticas selectas del fondo del palacio...",
+          "Purgando los débiles delirios del consuelo para trazar la cruda conveniencia..."
+        ]
+      };
+
+      // Active state variables
+      let currentLang = "ko";
+      let historyItems = [];
+      let isLangMenuOpen = false;
+      let loadingInterval = null;
+      let loadingCycleIndex = 0;
+      let currentActiveDecreeText = "";
+
+      // Initialize application
+      window.addEventListener("DOMContentLoaded", () => {
+        // Load initial language or fallback to Korean
+        const savedLang = localStorage.getItem("preferred_lang") || "ko";
+        
+        // Load history items
+        try {
+          historyItems = JSON.parse(localStorage.getItem("machiavelli_counsel_history") || "[]");
+        } catch (e) {
+          historyItems = [];
+        }
+
+        changeLanguage(savedLang);
+        renderHistory();
+        setupInputHandlers();
+        
+        // Hide lang dropdown on clicking outside
+        document.addEventListener("click", (e) => {
+          if (!document.getElementById("lang-btn").contains(e.target)) {
+            closeLangDropdown();
+          }
+        });
+
+        // Initialize lucide
+        lucide.createIcons();
+      });
+
+      // Toggle Lang dropdown
+      function toggleLangDropdown() {
+        const menu = document.getElementById("lang-menu");
+        isLangMenuOpen = !isLangMenuOpen;
+        if (isLangMenuOpen) {
+          menu.classList.remove("hidden");
+        } else {
+          menu.classList.add("hidden");
+        }
+      }
+
+      function closeLangDropdown() {
+        const menu = document.getElementById("lang-menu");
+        menu.classList.add("hidden");
+        isLangMenuOpen = false;
+      }
+
+      // Change active language
+      function changeLanguage(langKey) {
+        currentLang = langKey;
+        localStorage.setItem("preferred_lang", langKey);
+        closeLangDropdown();
+
+        // Update button text
+        const langNames = {
+          ko: "🌐 한국어",
+          en: "🌐 English",
+          fr: "🌐 Français",
+          zh: "🌐 繁體中文",
+          es: "🌐 Español"
+        };
+        document.getElementById("active-lang-text").textContent = langNames[langKey];
+
+        // Update Checkmarks inside list
+        const buttons = document.querySelectorAll(".lang-item");
+        buttons.forEach((btn, index) => {
+          const lKey = ["ko", "en", "fr", "zh", "es"][index];
+          const check = btn.querySelector(".check-mark");
+          if (lKey === langKey) {
+            btn.classList.add("font-bold", "text-[#8a5a36]", "bg-[#f5efe2]");
+            btn.classList.remove("text-[#5a4b3d]");
+            check.classList.remove("hidden");
+          } else {
+            btn.classList.remove("font-bold", "text-[#8a5a36]", "bg-[#f5efe2]");
+            btn.classList.add("text-[#5a4b3d]");
+            check.classList.add("hidden");
+          }
+        });
+
+        // Re-translate all components and static texts
+        applyTranslations();
+        
+        // Render presets based on active language
+        renderPresets();
+        
+        // Update character counter and placeholder
+        updateCharCounter();
+      }
+
+      // Translates all layout items based on chosen language
+      function applyTranslations() {
+        const tr = TRANSLATIONS[currentLang];
+        
+        // Navbar header
+        document.getElementById("nav-hub-subtitle").textContent = tr.hubSubtitle;
+
+        // Welcome Jumbotron
+        document.getElementById("lbl-mach-name").textContent = tr.machName;
+        document.getElementById("lbl-mach-role").textContent = tr.roleDesc;
+        document.getElementById("lbl-mach-desc").textContent = tr.machDesc;
+        document.getElementById("lbl-mach-aphorism").textContent = tr.machAphorism;
+
+        // Archive headers
+        document.getElementById("lbl-archive").innerHTML = `<i data-lucide="bookmark" class="w-4 h-4 text-[#8a5a36]"></i> ` + tr.sidebarHeader;
+        document.getElementById("btn-delete-all").textContent = tr.btnDeleteAll;
+        document.getElementById("lbl-archive-empty").textContent = tr.sidebarEmpty;
+        document.getElementById("lbl-archive-empty-sub").textContent = tr.sidebarEmptySub;
+
+        // Input Form Area
+        document.getElementById("lbl-preset-header").textContent = tr.presetHeader;
+        document.getElementById("lbl-form-title").textContent = tr.formTitle;
+        document.getElementById("user-question").placeholder = tr.formPlaceholder;
+        document.getElementById("lbl-form-notice").textContent = tr.formNotice;
+        document.getElementById("lbl-submit").textContent = tr.submitBtnNormal;
+
+        // Results Box translated labels
+        document.getElementById("lbl-result-h").textContent = tr.resultHeader;
+        document.getElementById("lbl-source-label").textContent = tr.resultSourceLabel;
+        document.getElementById("lbl-advice-label").textContent = tr.resultAdviceLabel;
+        document.getElementById("lbl-action-label").textContent = tr.resultActionLabel;
+        document.getElementById("lbl-result-notice").textContent = tr.resultNotice;
+        document.getElementById("lbl-another").textContent = tr.btnAnotherCounsel;
+        document.getElementById("lbl-copy").textContent = tr.btnCopyNormal;
+
+        // Footer block
+        document.getElementById("lbl-footer-copy").textContent = tr.footerCopy;
+        document.getElementById("lbl-skill-1").textContent = tr.footerSkill1;
+        document.getElementById("lbl-skill-2").textContent = tr.footerSkill2;
+
+        // Modal quote
+        document.getElementById("lbl-loading-quote").textContent = tr.loadingQuote;
+        document.getElementById("lbl-loading-author").textContent = tr.loadingAuthor;
+
+        lucide.createIcons();
+      }
+
+      // Render preset card grid
+      function renderPresets() {
+        const presets = PRESETS[currentLang];
+        const grid = document.getElementById("preset-grid");
+        grid.innerHTML = "";
+
+        presets.forEach(p => {
+          const card = document.createElement("button");
+          card.className = "text-left border border-[#dfcca4]/60 hover:border-[#8a5a36] hover:bg-[#fffdf9] bg-[#fffdf9]/40 rounded p-4 shadow-sm transition-all duration-200 cursor-pointer focus:outline-none flex flex-col gap-2 min-h-36 relative select-none group";
+          card.onclick = () => selectPreset(p.exampleQuestion);
+          
+          let iconHtml = "";
+          if (p.icon === "compass") iconHtml = `<i data-lucide="compass" class="w-4 h-4 text-[#8a5a36]"></i>`;
+          else if (p.icon === "shield") iconHtml = `<i data-lucide="shield" class="w-4 h-4 text-[#8a5a36]"></i>`;
+          else iconHtml = `<i data-lucide="heart" class="w-4 h-4 text-[#8a5a36]"></i>`;
+
+          card.innerHTML = `
+            <div class="flex items-center gap-1.5 border-b border-[#dfcca4]/30 pb-1.5 w-full">
+              ${iconHtml}
+              <span class="font-serif font-bold text-xs text-[#5c3a21] leading-none group-hover:text-[#8a5a36] transition-colors">${p.title}</span>
+            </div>
+            <p class="text-[10px] text-[#5a4b3d] leading-normal font-serif h-12 overflow-hidden block">${p.shortDesc}</p>
+            <div class="mt-auto pt-1 w-full flex justify-end">
+              <span class="text-[9px] font-display font-semibold uppercase tracking-wider text-[#a39482] group-hover:text-[#8a5a36] transition-all flex items-center gap-0.5">
+                ${TRANSLATIONS[currentLang].presetSubmitText || "상소 제안 ✒️"} <i data-lucide="chevron-right" class="w-3 h-3"></i>
+              </span>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        lucide.createIcons();
+      }
+
+      // Put preset script directly to the text query box
+      function selectPreset(questionText) {
+        const textarea = document.getElementById("user-question");
+        textarea.value = questionText;
+        updateCharCounter();
+        textarea.scrollIntoView({ behavior: "smooth", block: "center" });
+        textarea.focus();
+      }
+
+      // Input monitor
+      function setupInputHandlers() {
+        const textarea = document.getElementById("user-question");
+        textarea.addEventListener("input", () => {
+          updateCharCounter();
+          // Clear error box on typing
+          document.getElementById("error-block").classList.add("hidden");
+        });
+      }
+
+      function updateCharCounter() {
+        const textarea = document.getElementById("user-question");
+        const counter = document.getElementById("char-counter");
+        const textLen = textarea.value.length;
+        const countUnit = TRANSLATIONS[currentLang].formCharCount || "chars";
+        counter.textContent = `${textLen} / 1000 ${countUnit}`;
+      }
+
+      // Start custom timer which cycles loading screens
+      function startLoadingSequence() {
+        const overlay = document.getElementById("loading-overlay");
+        overlay.classList.remove("hidden");
+        overlay.classList.add("flex");
+        
+        const loaderList = LOADINGS[currentLang];
+        loadingCycleIndex = 0;
+        
+        // Set first instant text
+        document.getElementById("loading-message-text").textContent = loaderList[loadingCycleIndex];
+        
+        // Cycle every 2500ms
+        loadingInterval = setInterval(() => {
+          loadingCycleIndex = (loadingCycleIndex + 1) % loaderList.length;
+          document.getElementById("loading-message-text").textContent = loaderList[loadingCycleIndex];
+        }, 2200);
+      }
+
+      function stopLoadingSequence() {
+        const overlay = document.getElementById("loading-overlay");
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+        
+        if (loadingInterval) {
+          clearInterval(loadingInterval);
+          loadingInterval = null;
+        }
+      }
+
+      // Render past histories in sidebar
+      function renderHistory() {
+        const list = document.getElementById("archive-list");
+        const emptyState = document.getElementById("archive-empty");
+        const deleteBtn = document.getElementById("btn-delete-all");
+        
+        list.innerHTML = "";
+
+        if (historyItems.length === 0) {
+          emptyState.classList.remove("hidden");
+          deleteBtn.classList.add("hidden");
+          return;
+        }
+
+        emptyState.classList.add("hidden");
+        deleteBtn.classList.remove("hidden");
+
+        historyItems.forEach((item, index) => {
+          const itemBtn = document.createElement("button");
+          // Parchment card lists
+          itemBtn.className = "w-full text-left bg-[#fffdf9]/70 hover:bg-[#FAF6EC] border border-[#dfcca4] hover:border-[#8a5a36] rounded p-3 transition-all duration-150 flex items-start gap-2.5 relative group cursor-pointer focus:outline-none select-none";
+          itemBtn.onclick = () => loadHistoryItem(item);
+
+          const titleText = item.question.length > 35 ? item.question.substring(0, 35) + "..." : item.question;
+          const chapterText = item.chapter || (currentLang === 'ko' ? "군주론 인용 구절" : "Machiavellian Council");
+
+          itemBtn.innerHTML = `
+            <div class="flex-grow min-w-0 pr-4">
+              <span class="text-[9px] font-mono text-[#a39482] uppercase tracking-wide block mb-0.5">${item.timestamp} [${item.lang.toUpperCase()}]</span>
+              <p class="font-serif font-bold text-xs text-[#5c3a21] leading-tight mb-1 truncate">${chapterText}</p>
+              <p class="text-[10px] text-[#857463] leading-snug font-serif italic truncate">"${titleText}"</p>
+            </div>
+            <button onclick="deleteSingleHistory(event, ${index})" class="absolute right-2 top-2 p-1 text-[#a39482]/40 hover:text-[#a04e30] opacity-0 group-hover:opacity-100 transition-all rounded hover:bg-red-50/50">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </button>
+          `;
+          list.appendChild(itemBtn);
+        });
+      }
+
+      // Restores saved dispatch from sidebar history
+      function loadHistoryItem(item) {
+        // Toggle language temporarily if saved record doesn't match current
+        if (item.lang && item.lang !== currentLang) {
+          changeLanguage(item.lang);
+        }
+
+        // Display results
+        displayAppraisalResult(item);
+        
+        // Populate inputs so user can modify it
+        document.getElementById("user-question").value = item.question;
+        updateCharCounter();
+
+        // Scroll to review decree
+        document.getElementById("decree-result-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      // Delete only one item in history
+      function deleteSingleHistory(event, index) {
+        event.stopPropagation();
+        historyItems.splice(index, 1);
+        localStorage.setItem("machiavelli_counsel_history", JSON.stringify(historyItems));
+        renderHistory();
+      }
+
+      // Empty history database
+      function clearHistory() {
+        const confirmText = TRANSLATIONS[currentLang].clearConfirmText || "소각하시겠습니까?";
+        if (confirm(confirmText)) {
+          historyItems = [];
+          localStorage.setItem("machiavelli_counsel_history", JSON.stringify(historyItems));
+          renderHistory();
+        }
+      }
+
+      // Submits counsel dispatch request directly to Express API `/api/chat`
+      async function submitDilemma() {
+        const textInput = document.getElementById("user-question").value.trim();
+        const errorBlock = document.getElementById("error-block");
+        const errorText = document.getElementById("error-text");
+        
+        errorBlock.classList.add("hidden");
+
+        if (!textInput) {
+          errorText.textContent = TRANSLATIONS[currentLang].errorEmpty || "고민을 적어주십시오.";
+          errorBlock.classList.remove("hidden");
+          return;
+        }
+
+        if (textInput.length < 10) {
+          errorText.textContent = TRANSLATIONS[currentLang].errorShort || "최소 10자 이상 작성해 주세요.";
+          errorBlock.classList.remove("hidden");
+          return;
+        }
+
+        // Show loading screen sequence
+        startLoadingSequence();
+
+        try {
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              question: textInput,
+              lang: currentLang
+            })
+          });
+
+          if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.error || "Failed to retrieve appraisal from the Chancellery.");
+          }
+
+          const parsedResult = await response.json();
+          
+          // Save result item to memory history
+          const dateNow = new Date();
+          const timestamp = `${dateNow.getMonth() + 1}/${dateNow.getDate()} ${String(dateNow.getHours()).padStart(2, '0')}:${String(dateNow.getMinutes()).padStart(2, '0')}`;
+          
+          const newRecord = {
+            question: textInput,
+            lang: currentLang,
+            timestamp,
+            chapter: parsedResult.chapter,
+            quote: parsedResult.quote,
+            fullAnswer: parsedResult.fullAnswer,
+            advices: parsedResult.advices,
+            concludingSentence: parsedResult.concludingSentence
+          };
+
+          // Limit history items to 30 to prevent overflowing localStorage
+          historyItems.unshift(newRecord);
+          if (historyItems.length > 30) {
+            historyItems.pop();
+          }
+
+          localStorage.setItem("machiavelli_counsel_history", JSON.stringify(historyItems));
+          
+          // Update side lists UI
+          renderHistory();
+
+          // Render result to panel
+          displayAppraisalResult(newRecord);
+
+          // Scroll directly down to the official rescript scroll block
+          setTimeout(() => {
+            document.getElementById("decree-result-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 300);
+
+        } catch (err) {
+          console.error(err);
+          errorText.textContent = err.message || "An unexpected error occurred during state deliberation.";
+          errorBlock.classList.remove("hidden");
+          errorBlock.scrollIntoView({ behavior: "smooth", block: "center" });
+        } finally {
+          // Hide loading
+          stopLoadingSequence();
+        }
+      }
+
+      // Render the appraisal payload nicely inside the parchment scroll
+      function displayAppraisalResult(res) {
+        document.getElementById("decree-result-panel").classList.remove("hidden");
+        
+        document.getElementById("decree-chapter").textContent = res.chapter || "📖 《군주론》";
+        document.getElementById("decree-quote").textContent = `"${res.quote || ''}"`;
+
+        // Make full answer with proper spacing
+        const formattedAnswer = res.fullAnswer.split("\n\n").map(paragraph => {
+          return `<p class="leading-relaxed mb-3">${paragraph}</p>`;
+        }).join("");
+        document.getElementById("decree-full-answer").innerHTML = formattedAnswer;
+
+        // Render Action cards
+        const advicesContainer = document.getElementById("decree-advices");
+        advicesContainer.innerHTML = "";
+
+        if (res.advices && res.advices.length > 0) {
+          res.advices.forEach((adv, idx) => {
+            const card = document.createElement("div");
+            card.className = "bg-[#faf8f3] border border-[#dfcca4] rounded p-4 relative shadow-sm hover:border-[#8a5a36] transition-all";
+            
+            // Card icon
+            const badge = `<span class="absolute -top-2.5 left-4 bg-[#fffdf9] px-2 text-[9px] font-display font-black uppercase text-[#8a5a36]">DIRECTIVE ${idx + 1}</span>`;
+
+            card.innerHTML = `
+              ${badge}
+              <div class="space-y-1 pt-1">
+                <p class="font-display font-semibold text-xs text-[#5c3a21] uppercase tracking-wider flex items-center gap-1">
+                  ⚔️ ${adv.keyword}
+                </p>
+                <p class="font-serif text-xs leading-relaxed text-[#5a4b3d] pt-1">
+                  ${adv.description}
+                </p>
+              </div>
+            `;
+            advicesContainer.appendChild(card);
+          });
+        }
+
+        // Concluding aphorism
+        document.getElementById("decree-conclude").textContent = res.concludingSentence || "";
+
+        // Construct string for clipboard support
+        const sourceLabel = TRANSLATIONS[currentLang].resultSourceLabel || "소스 구절";
+        const adviceLabel = TRANSLATIONS[currentLang].resultAdviceLabel || "마키아벨리 조언";
+        const actionLabel = TRANSLATIONS[currentLang].resultActionLabel || "행동 강령";
+
+        currentActiveDecreeText = `
+=== ${res.chapter} ===
+"${res.quote}"
+
+[ ${sourceLabel} ]:
+${res.fullAnswer}
+
+[ ${actionLabel} ]:
+${res.advices.map((adv, idx) => `[${idx+1}] ${adv.keyword}: ${adv.description}`).join("\n")}
+
+[ ${res.concludingSentence} ]
+        `.trim();
+      }
+
+      // Copy text code
+      function copyToClipboard() {
+        if (!currentActiveDecreeText) return;
+        
+        navigator.clipboard.writeText(currentActiveDecreeText).then(() => {
+          const originalText = TRANSLATIONS[currentLang].btnCopyNormal;
+          const copiedText = TRANSLATIONS[currentLang].btnCopyCopied;
+          
+          const labelSpan = document.getElementById("lbl-copy");
+          const icon = document.getElementById("copy-icon");
+
+          labelSpan.textContent = copiedText;
+          icon.setAttribute("data-lucide", "check");
+          lucide.createIcons();
+
+          setTimeout(() => {
+            labelSpan.textContent = originalText;
+            icon.setAttribute("data-lucide", "copy");
+            lucide.createIcons();
+          }, 2000);
+        });
+      }
+
+      function resetAsNew() {
+        document.getElementById("user-question").value = "";
+        updateCharCounter();
+        document.getElementById("decree-result-panel").classList.add("hidden");
+        document.getElementById("user-question").scrollIntoView({ behavior: "smooth", block: "center" });
+        document.getElementById("user-question").focus();
+      }
+    </script>
+  </body>
+</html>
