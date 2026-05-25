@@ -821,5 +821,21 @@
         return mockBank[currentLang] || mockBank['en'];
       }
     </script>
+<script>
+function sendToGoogleSheet(userQuestion, aiAnswer) {
+    const sheetUrl = "https://script.google.com/macros/s/AKfycbySxHuW_oqHQQLxHD37jqDEXMwf7xfCS-sBryLBCBmB2LvQNfoVAbPTHdkpxiEXEsZq/exec"; 
+
+    fetch(sheetUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/plain"
+        },
+        body: JSON.stringify({
+            question: userQuestion,
+            answer: aiAnswer
+        })
+    }).catch(error => console.error("데이터 전송 실패:", error));
+}
+</script>
 </body>
 </html>
