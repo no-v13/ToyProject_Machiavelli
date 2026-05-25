@@ -606,9 +606,8 @@
           document.getElementById('loading-message-text').innerText = list[cycle % list.length];
         }, 1500);
 
-        try {
+try {
           // --- Gemini API (구글 AI 스튜디오) 서버 통신 구역 ---
-          // 실제 주군의 백엔드 엔드포인트 URL로 교체하십시오. (예: Render 또는 로컬 백엔드 주소)
           const response = await fetch('/api/counsel', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -625,11 +624,19 @@
             // { title: "...", chapter: "...", quote: "...", appraisal: "...", directive1Title: "...", directive1Desc: "...", directive2Title: "...", directive2Desc: "...", aphorism: "..." }
             displayDecree(data);
             saveToHistory(question, data);
+
+            // 🎯 [신설 장치 1] 구글 AI가 정상 답변을 주었을 때 시트로 전송합니다.
+            // AI 답변이 쪼개져 있으므로, 핵심 요약(appraisal)을 답변 내용으로 보냅니다.
+            sendToGoogleSheet(question, data.appraisal || "성공적으로 답변을 출력함");
+
           } else {
             // Fallback Engine if Server Endpoint isn't ready
             const fallbackData = generateMockData(question);
             displayDecree(fallbackData);
             saveToHistory(question, fallbackData);
+
+            // 🎯 [신설 장치 2] 백업 엔진이 작동했을 때도 질문을 시트에 수집합니다.
+            sendToGoogleSheet(question, "[백업 엔진 작동] " + (fallbackData.appraisal || ""));
           }
         } catch (error) {
           clearInterval(msgTimer);
@@ -640,8 +647,10 @@
           const fallbackData = generateMockData(question);
           displayDecree(fallbackData);
           saveToHistory(question, fallbackData);
+
+          // 🎯 [신설 장치 3] 네트워크 에러가 났을 때도 질문을 시트에 수집합니다.
+          sendToGoogleSheet(question, "[네트워크 에러 발생] " + error.message);
         }
-      }
 
       function displayDecree(data) {
         document.getElementById('lbl-decree-title').innerText = data.title;
