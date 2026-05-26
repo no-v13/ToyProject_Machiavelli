@@ -1,0 +1,17 @@
+{
+  "name": "machiavelli-realist-advisory",
+  "private": true,
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "node server.cjs",
+    "build": "echo 'Vanilla HTML and node server.cjs'",
+    "start": "node server.cjs"
+  },
+  "dependencies": {
+    "@google/genai": "^1.29.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2"
+  }
+}
